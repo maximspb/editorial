@@ -36,7 +36,6 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -66,7 +65,7 @@ class UserController extends Controller
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                    return $this->redirect('index');
+                return $this->redirect('index');
 
             }
         }
@@ -138,9 +137,9 @@ class UserController extends Controller
         $model = new SignupForm();
         $user = $this->findModel($id);
         $user->scenario = 'changePassword';
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             $user->password_hash = Yii::$app->security->generatePasswordHash($model->password);
-            if ($user->save()){
+            if ($user->save()) {
                 Yii::$app->session->setFlash('success', 'Пароль изменен');
                 return $this->redirect(['view', 'id' => $id]);
             }

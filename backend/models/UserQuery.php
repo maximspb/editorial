@@ -3,8 +3,6 @@
 namespace backend\models;
 
 /**
- * This is the ActiveQuery class for [[User]].
- *
  * @see User
  */
 class UserQuery extends \yii\db\ActiveQuery
@@ -20,7 +18,7 @@ class UserQuery extends \yii\db\ActiveQuery
      */
     public function all($db = null)
     {
-        return parent::all($db);
+         return parent::all($db);
     }
 
     /**

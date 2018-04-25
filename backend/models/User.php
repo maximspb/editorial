@@ -60,6 +60,7 @@ class User extends \common\models\User
                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
                 ],
+
                 'value' => new Expression('NOW()'),
             ],
         ];
@@ -106,7 +107,7 @@ class User extends \common\models\User
      */
     public function getNews()
     {
-        return $this->hasMany(News::className(), ['user_id' => 'id']);
+        return $this->hasMany(News::class, ['user_id' => 'id']);
     }
 
     /**
