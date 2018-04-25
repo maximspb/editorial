@@ -20,9 +20,9 @@ class m180425_023115_create_author_table extends Migration
     {
         $this->createTable('author', [
             'id' => $this->primaryKey(),
-            'name'=>$this->string()->notNull(),
-            'email'=>$this->string()->unique(),
-            'slug' =>$this->string()->unique()
+            'name'=>$this->string(100)->notNull(),
+            'email'=>$this->string(100)->unique(),
+            'slug' =>$this->string(100)->unique()
         ]);
     }
 

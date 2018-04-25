@@ -14,8 +14,8 @@ class m180425_023635_create_rubric_table extends Migration
     {
         $this->createTable('rubric', [
             'id' => $this->primaryKey(),
-            'slug'=>$this->string()->unique(),
-            'rubric_title'=>$this->string()->unique(),
+            'slug'=>$this->string(100)->unique(),
+            'rubric_title'=>$this->string(100)->unique(),
             'theme_id'=>$this->integer()
         ]);
 

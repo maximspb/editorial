@@ -16,8 +16,8 @@ class m180425_050834_create_tag_table extends Migration
         $this->createTable('tag', [
             'id' => $this->primaryKey(),
             //название тега по-русски
-            'tag_name'=>$this->string()->unique(),
-            'slug'=>$this->string()
+            'tag_name'=>$this->string(150)->unique(),
+            'slug'=>$this->string(150)
         ]);
     }
 

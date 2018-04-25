@@ -14,11 +14,11 @@ class m180425_024703_create_image_table extends Migration
     {
         $this->createTable('image', [
             'id' => $this->primaryKey(),
-            'filename'=>$this->string()->unique(),
-            'alt'=>$this->string()->defaultValue(null),
+            'filename'=>$this->string(100)->unique(),
+            'alt'=>$this->string(100)->defaultValue(null),
 
             //Источник изображения, т.е. откуда оно было взято:
-            'source'=>$this->string()->defaultValue('Соцсети'),
+            'source'=>$this->string(100)->defaultValue('Соцсети'),
             'created_at'=>$this->timestamp()->defaultValue(null),
         ]);
     }

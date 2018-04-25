@@ -17,11 +17,11 @@ class m180425_021857_create_theme_table extends Migration
     {
         $this->createTable('theme', [
             'id' => $this->primaryKey(),
-            'slug'=>$this->string()->unique()->notNull(),
+            'slug'=>$this->string(100)->unique()->notNull(),
 
             //Название темы по-русски, напр. "Политика",
             //"Культура" итд
-            'theme_title'=>$this->string()->unique()->notNull()
+            'theme_title'=>$this->string(100)->unique()->notNull()
         ]);
     }
 

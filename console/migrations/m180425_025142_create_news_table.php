@@ -14,8 +14,8 @@ class m180425_025142_create_news_table extends Migration
     {
         $this->createTable('news', [
             'id' => $this->primaryKey(),
-            'title'=> $this->string()->notNull(),
-            'lead'=> $this->string()->notNull(),
+            'title'=> $this->string(100)->notNull(),
+            'lead'=> $this->string(100)->notNull(),
             'text'=>$this->text()->notNull(),
             'image_id'=>$this->integer(),
             'theme_id'=>$this->integer(),
@@ -23,7 +23,7 @@ class m180425_025142_create_news_table extends Migration
             'user_id'=>$this->integer(),
             'created_at' => $this->timestamp()->defaultValue(null),
             'updated_at' => $this->timestamp()->defaultValue(null),
-            'slug'=>$this->string()->unique()
+            'slug'=>$this->string(150)->unique()
         ]);
 
         //связь с таблицей изображений
