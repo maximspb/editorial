@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Author;
 use common\models\Rubric;
+use common\models\Tag;
 use Yii;
 use backend\models\News;
 use backend\models\NewsSearch;
@@ -70,7 +71,9 @@ class NewsController extends Controller
     {
         $model = new News();
 
-        //получения списка авторов для дальнейшей связи их с новостью
+        $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
+
+        //получение списка авторов для дальнейшей связи их с новостью
         $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
 
         //получение списка рубрик в формате id => название. В post-запрос передается id
@@ -83,7 +86,8 @@ class NewsController extends Controller
         return $this->render('create', [
             'model' => $model,
             'rubrics' => $rubrics,
-            'authorsList' => $authorsList
+            'authorsList' => $authorsList,
+            'data' => $allTags
         ]);
     }
 
@@ -97,6 +101,7 @@ class NewsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
 
         //получения списка авторов для дальнейшей связи их с новостью
         $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
@@ -112,6 +117,7 @@ class NewsController extends Controller
             'model' => $model,
             'rubrics' => $rubrics,
             'authorsList' => $authorsList,
+            'data' => $allTags
         ]);
     }
 

@@ -55,7 +55,8 @@ class News extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['title', 'lead'], 'string', 'max' => 100],
             [['slug'], 'string', 'max' => 150],
-            [['slug'], 'unique'],
+            [['slug'], 'unique',],
+            [['title'], 'unique', 'message' => 'Такой заголовок уже был'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => Image::className(), 'targetAttribute' => ['image_id' => 'id']],
             [['rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rubric::className(), 'targetAttribute' => ['rubric_id' => 'id']],
             [['theme_id'], 'exist', 'skipOnError' => true, 'targetClass' => Theme::className(), 'targetAttribute' => ['theme_id' => 'id']],
@@ -101,6 +102,7 @@ class News extends \yii\db\ActiveRecord
             'created_at' => 'Создано',
             'updated_at' => 'Обновлено',
             'slug' => 'В адресной строке',
+            'tags' => 'Теги',
         ];
     }
 
@@ -155,10 +157,10 @@ class News extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getNewsTags()
+    /*public function getNewsTags()
     {
         return $this->hasMany(NewsTag::class, ['news_id' => 'id']);
-    }
+    }*/
 
     /**
      * @return \yii\db\ActiveQuery
