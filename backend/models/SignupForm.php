@@ -4,6 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 
+/**
+ * Модель взята с фронтенд-части. В админке
+ * не предусмотрено свободной регистрации
+ * Class SignupForm
+ * @package backend\models
+ */
 class SignupForm extends Model
 {
     public $username;
