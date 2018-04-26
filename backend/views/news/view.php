@@ -4,6 +4,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+
 /* @var $this yii\web\View */
 /* @var $model backend\models\News */
 
@@ -32,6 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'lead',
             'text:ntext',
+            [
+                'attribute' => 'tags',
+                'value' => function ($data) {
+                    $tags = ArrayHelper::getColumn($data->tags, 'tag_name');
+                    $tagsList = implode(', ', $tags);
+                    return $tagsList;
+                },
+            ],
             'theme.theme_title',
             'rubric.rubric_title',
             'user.full_name',
@@ -45,7 +54,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at',
             'updated_at',
-            'slug',
         ],
     ]) ?>
 </div>
