@@ -104,7 +104,10 @@ class News extends \yii\db\ActiveRecord
             'updated_at' => 'Обновлено',
             'slug' => 'В адресной строке',
             'tags' => 'Теги',
+<<<<<<< HEAD
             'publish' => 'Опубликовать'
+=======
+>>>>>>> dev
         ];
     }
 
