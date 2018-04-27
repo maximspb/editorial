@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 
 class NewsController extends Controller
@@ -26,6 +27,15 @@ class NewsController extends Controller
                 'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -74,10 +84,10 @@ class NewsController extends Controller
         $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
 
         //получение списка авторов для дальнейшей связи их с новостью
-        $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
+        $authorsList = ArrayHelper::map(Author::find()->all(), 'id', 'name');
 
         //получение списка рубрик в формате id => название. В post-запрос передается id
-        $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id','rubric_title');
+        $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id', 'rubric_title');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -104,10 +114,10 @@ class NewsController extends Controller
         $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
 
         //получения списка авторов для дальнейшей связи их с новостью
-        $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
+        $authorsList = ArrayHelper::map(Author::find()->all(), 'id', 'name');
 
         //Массив id и названий Рубрик
-        $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id','rubric_title');
+        $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id', 'rubric_title');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -133,6 +143,34 @@ class NewsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionPublish($id)
+    {
+        $article = $this->findModel($id);
+        $article->publish = 1;
+
+        if ($article->save()) {
+            Yii::$app->session->setFlash('success', 'Опубликовано');
+            return $this->redirect([
+                'view',
+                'id' => $article->id
+            ]);
+        }
+    }
+
+    public function actionUnpublish($id)
+    {
+        $article = $this->findModel($id);
+        $article->publish = 0;
+
+        if ($article->save()) {
+            Yii::$app->session->setFlash('success', 'Запись скрыта из опубликованных');
+            return $this->redirect([
+                'view',
+                'id' => $article->id
+            ]);
+        }
     }
 
     /**

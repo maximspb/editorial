@@ -23,7 +23,7 @@ use yii\db\Expression;
  * @property string $created_at
  * @property string $updated_at
  * @property string $slug
- *
+ * @property integer $publish
  * @property AuthorNews[] $authorNews
  * @property Author[] $authors
  * @property Image $image
@@ -61,6 +61,7 @@ class News extends \yii\db\ActiveRecord
             [['rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => Rubric::className(), 'targetAttribute' => ['rubric_id' => 'id']],
             [['theme_id'], 'exist', 'skipOnError' => true, 'targetClass' => Theme::className(), 'targetAttribute' => ['theme_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            ['publish', 'integer', 'max' => 1],
         ];
     }
 
@@ -103,6 +104,7 @@ class News extends \yii\db\ActiveRecord
             'updated_at' => 'Обновлено',
             'slug' => 'В адресной строке',
             'tags' => 'Теги',
+            'publish' => 'Опубликовать'
         ];
     }
 
