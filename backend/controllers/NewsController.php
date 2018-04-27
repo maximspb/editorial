@@ -84,11 +84,9 @@ class NewsController extends Controller
         $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
 
         //получение списка авторов для дальнейшей связи их с новостью
-<<<<<<< HEAD
-        $authorsList = ArrayHelper::map(Author::find()->all(), 'id', 'name');
-=======
+
         $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
->>>>>>> dev
+
 
         //получение списка рубрик в формате id => название. В post-запрос передается id
         $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id', 'rubric_title');
