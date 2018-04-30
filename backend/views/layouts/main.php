@@ -29,14 +29,30 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'Админка',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Сотрудники', 'url' => ['/user/index']],
+        [
+            'label' => 'Новости',
+            'items' => [
+                ['label' => 'Все новости', 'url' => '/news/index'],
+                ['label' => 'Добавить новость', 'url' => '/news/create'],
+            ],
+        ],
+        [
+            'label' => 'Темы и рубрики',
+            'items' => [
+                ['label' => 'Все темы', 'url' => '/theme/index'],
+                ['label' => 'Все рубрики', 'url' => '/rubric/index'],
+            ],
+        ],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -44,14 +60,14 @@ AppAsset::register($this);
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                'Выйти из админки (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
             . '</li>';
     }
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' =>'navbar-nav'],
         'items' => $menuItems,
     ]);
     NavBar::end();

@@ -11,27 +11,10 @@ use common\models\Rubric;
 use backend\models\RubricSearch;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-class RubricController extends Controller
+class RubricController extends AdminBaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Rubric models.
      * @return mixed

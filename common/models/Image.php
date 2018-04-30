@@ -2,9 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-use yii\db\ActiveRecord;
-use yii\db\Expression;
 
 /**
  * This is the model class for table "image".
@@ -13,8 +10,6 @@ use yii\db\Expression;
  * @property string $filename
  * @property string $alt
  * @property string $source
- * @property string $created_at
- *
  * @property ImageTag[] $imageTags
  * @property Tag[] $tags
  * @property News[] $news
@@ -35,24 +30,11 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at'], 'safe'],
             [['filename', 'alt', 'source'], 'string', 'max' => 100],
             [['filename'], 'unique'],
         ];
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc
