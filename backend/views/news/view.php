@@ -9,14 +9,15 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\News */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Новости', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="news-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a('Добавить изображение', ['image/add-image', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+
         <?= Html::a('Опубликовать', ['publish', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Снять с публикации', ['unpublish', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Обновить публикацию', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -59,3 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 </div>
+    <?php if (!empty($model->image->filename)) : ?>
+    <img src="/images/<?php echo $model->image->filename; ?>" alt="">
+    <?php endif; ?>

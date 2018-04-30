@@ -2,36 +2,36 @@
 
 namespace backend\controllers;
 
+use backend\models\News;
 use Yii;
-use common\models\Theme;
-use backend\models\ThemeSearch;
-use yii\web\Controller;
+use common\models\Image;
+use backend\models\UploadImgForm;
+use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
- * ThemeController implements the CRUD actions for Theme model.
+ * ImageController implements the CRUD actions for Image model.
  */
-class ThemeController extends AdminBaseController
+class ImageController extends AdminBaseController
 {
+
+
     /**
-     * Lists all Theme models.
+     * Lists all Image models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ThemeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->pagination = ['pageSize' => 10];
+
+            $query = Image::find()->asArray()->all();
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'query' => $query,
         ]);
     }
 
     /**
-     * Displays a single Theme model.
+     * Displays a single Image model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -44,13 +44,13 @@ class ThemeController extends AdminBaseController
     }
 
     /**
-     * Creates a new Theme model.
+     * Creates a new Image model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Theme();
+        $model = new Image();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -61,8 +61,27 @@ class ThemeController extends AdminBaseController
         ]);
     }
 
+    public function actionAddImage($id)
+    {
+        $article = News::findOne(['id' => $id]);
+        $model = new UploadImgForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->uploadFile()) {
+                $article->image_id = $model->image_id;
+                $article->save();
+                return $this->redirect(['news/view', 'id' => $id]);
+            }
+        }
+
+        return $this->render('addImage', ['model' => $model]);
+
+    }
+
+
     /**
-     * Updates an existing Theme model.
+     * Updates an existing Image model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -82,7 +101,7 @@ class ThemeController extends AdminBaseController
     }
 
     /**
-     * Deletes an existing Theme model.
+     * Deletes an existing Image model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -96,15 +115,15 @@ class ThemeController extends AdminBaseController
     }
 
     /**
-     * Finds the Theme model based on its primary key value.
+     * Finds the Image model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Theme the loaded model
+     * @return Image the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Theme::findOne($id)) !== null) {
+        if (($model = Image::findOne($id)) !== null) {
             return $model;
         }
 

@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -104,20 +103,11 @@ class News extends \yii\db\ActiveRecord
             'updated_at' => 'Обновлено',
             'slug' => 'В адресной строке',
             'tags' => 'Теги',
-<<<<<<< HEAD
             'publish' => 'Опубликовать'
-=======
->>>>>>> dev
+
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthorNews()
-    {
-        return $this->hasMany(AuthorNews::class, ['news_id' => 'id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -159,13 +149,6 @@ class News extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    /*public function getNewsTags()
-    {
-        return $this->hasMany(NewsTag::class, ['news_id' => 'id']);
-    }*/
 
     /**
      * @return \yii\db\ActiveQuery

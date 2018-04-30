@@ -5,28 +5,11 @@ namespace backend\controllers;
 use Yii;
 use common\models\Tag;
 use common\models\TagSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 
-class TagController extends Controller
+class TagController extends AdminBaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Tag models.
      * @return mixed

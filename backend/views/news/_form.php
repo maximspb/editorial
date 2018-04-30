@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
-use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\News */
@@ -19,8 +18,6 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'lead')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'image_id')->textInput() ?>
 
     <?= $form->field($model, 'rubric_id')->dropDownList($rubrics) ?>
 

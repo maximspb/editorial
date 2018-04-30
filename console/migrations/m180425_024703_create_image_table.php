@@ -19,7 +19,6 @@ class m180425_024703_create_image_table extends Migration
 
             //Источник изображения, т.е. откуда оно было взято:
             'source'=>$this->string(100)->defaultValue('Соцсети'),
-            'created_at'=>$this->timestamp()->defaultValue(null),
         ]);
     }
 

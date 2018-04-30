@@ -8,38 +8,12 @@ use common\models\Tag;
 use Yii;
 use backend\models\News;
 use backend\models\NewsSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
 
-
-class NewsController extends Controller
+class NewsController extends AdminBaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Все новости.
@@ -80,13 +54,10 @@ class NewsController extends Controller
     public function actionCreate()
     {
         $model = new News();
-
         $allTags = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');
 
         //получение списка авторов для дальнейшей связи их с новостью
-
         $authorsList = ArrayHelper::map(Author::find()->all(), 'id','name');
-
 
         //получение списка рубрик в формате id => название. В post-запрос передается id
         $rubrics = ArrayHelper::map(Rubric::find()->all(), 'id', 'rubric_title');
@@ -102,6 +73,8 @@ class NewsController extends Controller
             'data' => $allTags
         ]);
     }
+
+
 
     /**
      * Updates an existing News model.
@@ -133,12 +106,14 @@ class NewsController extends Controller
         ]);
     }
 
+
+
     /**
      * Deletes an existing News model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException |\Throwable if the model cannot be found
      */
     public function actionDelete($id)
     {
@@ -147,6 +122,14 @@ class NewsController extends Controller
         return $this->redirect(['index']);
     }
 
+
+
+    /**
+     * Метод изменения поля published ("опубликовано")
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionPublish($id)
     {
         $article = $this->findModel($id);
@@ -154,13 +137,16 @@ class NewsController extends Controller
 
         if ($article->save()) {
             Yii::$app->session->setFlash('success', 'Опубликовано');
-            return $this->redirect([
-                'view',
-                'id' => $article->id
-            ]);
+            return $this->redirect(['index']);
         }
     }
 
+    /**
+     * Метод скрытия новости от публикации
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionUnpublish($id)
     {
         $article = $this->findModel($id);
@@ -174,6 +160,8 @@ class NewsController extends Controller
             ]);
         }
     }
+
+
 
     /**
      * Finds the News model based on its primary key value.

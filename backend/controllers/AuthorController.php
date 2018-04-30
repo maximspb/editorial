@@ -5,11 +5,10 @@ namespace backend\controllers;
 use Yii;
 use common\models\Author;
 use backend\models\AuthorSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-class AuthorController extends Controller
+class AuthorController extends AdminBaseController
 {
     /**
      * @inheritdoc
@@ -50,7 +49,6 @@ class AuthorController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $news = $model->news;
         return $this->render('view', [
             'model' => $model,
 
