@@ -4,10 +4,14 @@ namespace backend\controllers;
 
 use backend\models\News;
 use Yii;
-use common\models\Image;
+use backend\models\Image;
 use backend\models\UploadImgForm;
+use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
+use yii\data\Sort;
+use common\models\Tag;
 
 /**
  * ImageController implements the CRUD actions for Image model.
@@ -22,61 +26,56 @@ class ImageController extends AdminBaseController
      */
     public function actionIndex()
     {
+        $images = Image::find();
 
-            $query = Image::find()->asArray()->all();
+        $count = $images->count();
 
+        $pagination = new Pagination(['totalCount' => $count]);
+        $pagination->pageSize = 10;
+
+        $sort = new Sort([
+            'attributes' => [
+                'created_at',
+            ]
+        ]);
+        $models = $images->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->orderBy($sort->orders)
+            ->all();
         return $this->render('index', [
-            'query' => $query,
+            'models' => $models,
+            'sort' => $sort,
+            'pages' => $pagination
         ]);
     }
 
-    /**
-     * Displays a single Image model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
+
+    public function actionAddImage()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Image model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Image();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionAddImage($id)
-    {
-        $article = News::findOne(['id' => $id]);
         $model = new UploadImgForm();
 
         if (Yii::$app->request->isPost) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->uploadFile()) {
-                $article->image_id = $model->image_id;
-                $article->save();
-                return $this->redirect(['news/view', 'id' => $id]);
-            }
+                    return $this->redirect(['index']);
+                }
         }
+        return $this->render('addImage', [
+            'model' => $model,
+        ]);
 
-        return $this->render('addImage', ['model' => $model]);
+    }
 
+    public function actionSelectFromGallery($id)
+    {
+        $article = News::findOne(['id' => $id]);
+        $images = Image::find()->orderBy('id')->all();
+        if ($article->load(Yii::$app->request->post()) && $article->save()){
+            return $this->redirect(['news/view', 'id' => $id]);
+        }
+        return $this->render('selectFromGallery', [
+            'article' => $article, 'images' => $images
+        ]);
     }
 
 
@@ -90,13 +89,15 @@ class ImageController extends AdminBaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $data = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'data' => $data,
         ]);
     }
 

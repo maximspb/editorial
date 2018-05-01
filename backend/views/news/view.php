@@ -16,7 +16,7 @@ $this->title = $model->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Добавить изображение', ['image/add-image', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить изображение', ['image/select-from-gallery', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
 
         <?= Html::a('Опубликовать', ['publish', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Снять с публикации', ['unpublish', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
@@ -29,6 +29,9 @@ $this->title = $model->title;
             ],
         ]) ?>
     </p>
+    <?php if (!empty($model->image->filename)) : ?>
+        <img src="/images/<?php echo $model->image->filename; ?>" alt="">
+    <?php endif; ?>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -60,6 +63,3 @@ $this->title = $model->title;
         ],
     ]) ?>
 </div>
-    <?php if (!empty($model->image->filename)) : ?>
-    <img src="/images/<?php echo $model->image->filename; ?>" alt="">
-    <?php endif; ?>

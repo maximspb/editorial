@@ -46,6 +46,15 @@ AppAsset::register($this);
                 ['label' => 'Добавить новость', 'url' => '/news/create'],
             ],
         ],
+
+        [
+            'label' => 'Картинки',
+            'items' => [
+                ['label' => 'Все картинки', 'url' => '/image/index'],
+                ['label' => 'Загрузить картинку', 'url' => '/image/add-image'],
+            ],
+        ],
+
         [
             'label' => 'Темы и рубрики',
             'items' => [

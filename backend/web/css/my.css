@@ -1,0 +1,11 @@
+.my-flex-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.my-flex-block {
+    flex: 1 0 20%;
+    margin: 5px;
+    margin-bottom: 20px;
+    padding: 10px;
+    height: 150px;
+}
