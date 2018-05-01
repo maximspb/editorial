@@ -2,6 +2,10 @@
 
 namespace common\models;
 
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
+
 
 /**
  * This is the model class for table "image".
@@ -32,6 +36,21 @@ class Image extends \yii\db\ActiveRecord
         return [
             [['filename', 'alt', 'source'], 'string', 'max' => 100],
             [['filename'], 'unique'],
+        ];
+    }
+
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+                'value' => new Expression('NOW()'),
+            ],
+
         ];
     }
 

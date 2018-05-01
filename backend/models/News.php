@@ -37,8 +37,11 @@ class News extends \common\models\News
         return $rules;
     }
 
-
-    public function afterSave($insert, $changedAttributes)
+    /**
+     * метод создания связи
+     * новости с авторами
+     */
+    private function setNewsToAuthorsCollation()
     {
         //Проверка на добавление авторов через форму
         if (!empty($this->authorsList)) {
@@ -54,7 +57,14 @@ class News extends \common\models\News
                 $addAuthors->save();
             }
         }
+    }
 
+    /**
+     * метод создания связи
+     * новости с тегами
+     */
+    private function setNewsToTagsCollation()
+    {
         //связь новости с тегами после успешного сохранения новости через связующую модель NewsTag
         if (!empty($this->tagsList)) {
             //если теги заданы через форму, предыдущий список обнуляется
@@ -79,7 +89,11 @@ class News extends \common\models\News
                 $addTagsToArticle->save();
             }
         }
-
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->setNewsToAuthorsCollation();
+        $this->setNewsToTagsCollation();
         parent::afterSave($insert, $changedAttributes);
     }
 
