@@ -38,7 +38,13 @@ AppAsset::register($this);
 
 
     $menuItems = [
-        ['label' => 'Сотрудники', 'url' => ['/user/index']],
+        [
+            'label' => 'Сотрудники и авторы',
+            'items' => [
+                ['label' => 'Все сотрудники', 'url' =>['/user/index']],
+                ['label' => 'Все авторы', 'url' =>['/author/index']],
+            ],
+        ],
         [
             'label' => 'Новости',
             'items' => [
@@ -56,10 +62,11 @@ AppAsset::register($this);
         ],
 
         [
-            'label' => 'Темы и рубрики',
+            'label' => 'Темы, рубрики, теги',
             'items' => [
                 ['label' => 'Все темы', 'url' => '/theme/index'],
                 ['label' => 'Все рубрики', 'url' => '/rubric/index'],
+                ['label' => 'Все теги', 'url' => '/tag/index'],
             ],
         ],
     ];

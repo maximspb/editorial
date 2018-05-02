@@ -42,6 +42,11 @@ class Image extends \common\models\Image
         return $rules;
     }
 
+    public static function getAllImagesSortedById()
+    {
+        return Image::find()->orderBy('id DESC')->all();
+    }
+
     /**
      * метод создания превью загруженного изображения
      */
@@ -83,9 +88,20 @@ class Image extends \common\models\Image
         }
     }
 
+    private function resizeSavedImage()
+    {
+        $image = \yii\imagine\Image::resize(
+            \Yii::getAlias('@img').'/'.$this->filename,
+            640, 480
+        );
+        $image = \yii\imagine\Image::crop($image, 640, 480);
+        $image->save(\Yii::getAlias('@img').'/'.$this->filename);
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         $this->makeThumbnail();
+        $this->resizeSavedImage();
         $this->setImageToTagsCollation();
         parent::afterSave($insert, $changedAttributes);
     }

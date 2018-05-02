@@ -7,7 +7,6 @@ use Yii;
 use backend\models\Image;
 use backend\models\UploadImgForm;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\data\Sort;
@@ -27,7 +26,6 @@ class ImageController extends AdminBaseController
     public function actionIndex()
     {
         $images = Image::find();
-
         $count = $images->count();
 
         $pagination = new Pagination(['totalCount' => $count]);
@@ -45,11 +43,17 @@ class ImageController extends AdminBaseController
         return $this->render('index', [
             'models' => $models,
             'sort' => $sort,
-            'pages' => $pagination
+            'pages' => $pagination,
         ]);
     }
 
-
+    /**
+     * Экшен загрузки нового изображения на сервер
+     * и сохранения нового объекта Image в БД.
+     * В данном случае - без привязки к конкретной
+     * новости
+     * @return string|\yii\web\Response
+     */
     public function actionAddImage()
     {
         $model = new UploadImgForm();
@@ -66,15 +70,62 @@ class ImageController extends AdminBaseController
 
     }
 
-    public function actionSelectFromGallery($id)
+    /**
+     * экшен для загрузки новой картинки
+     * из конкретной новости
+     * @param $id
+     * @return string|\yii\web\Response
+     */
+    public function  actionUploadImgToArticle($id)
     {
+        $model = new UploadImgForm();
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->uploadFile()) {
+                return $this->redirect(['select-from-gallery', 'id' => $id]);
+            }
+        }
+        return $this->render('addImage', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Экшен выбора картинки для новости из галереи загруженных.
+     * Возможен как выбор произвольной картинки из галереи,
+     * так и выборка изображений по тегу
+     * @param $id
+     * @param string|null $tagName
+     * @return string|\yii\web\Response
+     */
+    public function actionSelectFromGallery($id, string $tagName= null)
+    {
+
+        //модель для activeForm поиска
+        $tag = new Tag();
+
         $article = News::findOne(['id' => $id]);
-        $images = Image::find()->orderBy('id')->all();
+        $allImages = Image::getAllImagesSortedById();
+        $taggedImages = \backend\models\Tag::findImagesByTagName($tagName);
+
+        if (null !== $taggedImages) {
+            krsort($taggedImages);
+        }
+
+        /*Массив картинок для галереи, который формируется исходя из того,
+        был ли передан в $_GET из формы поиска  запрос на поис тега. Если да, то будет выведен
+        массив только из картинок, имеющих указанный тег*/
+        $images = $taggedImages ?? $allImages;
+
+        //Сохранение связи картинки с новостью через присвоение значения image_id
         if ($article->load(Yii::$app->request->post()) && $article->save()){
             return $this->redirect(['news/view', 'id' => $id]);
         }
+
         return $this->render('selectFromGallery', [
-            'article' => $article, 'images' => $images
+            'article' => $article,
+            'images' => $images,
+            'tag' => $tag
         ]);
     }
 
@@ -89,7 +140,7 @@ class ImageController extends AdminBaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $data = ArrayHelper::map(Tag::find()->all(), 'id', 'tag_name');;
+        $data = \backend\models\Tag::getMappedFromIdToNameArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);

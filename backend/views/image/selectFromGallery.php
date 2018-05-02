@@ -3,6 +3,22 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
+use yii\widgets\Pjax;
+
+Pjax::begin([]);
+$form = ActiveForm::begin([
+    'options' => ['data' => ['pjax' => true]],
+    'method' => 'get',
+    'id' => 'tag_select'
+]);
+
+echo $form->field($tag, 'tag_name')->textInput(['name' => 'tagName']); ?>
+<div class="form-group">
+        <?= Html::submitButton('Выбрать картинки по тегу', ['class' => 'btn-link']) ?>
+    </div>
+<?php ActiveForm::end();
+Pjax::end();
+
 $form = ActiveForm::begin(['id' => 'gallery']); ?>
     <div class="container">
     <div class="my-flex-container">
@@ -25,7 +41,8 @@ $form = ActiveForm::begin(['id' => 'gallery']); ?>
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Выбрать картинку для публикации', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Выбрать картинку для публикации', ['class' => 'btn']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>
+<?= Html::a('Вернуться', ['/news/view', 'id' => $article->id, 'class' => 'btn']);

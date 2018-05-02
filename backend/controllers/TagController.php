@@ -6,7 +6,6 @@ use Yii;
 use common\models\Tag;
 use common\models\TagSearch;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 
 class TagController extends AdminBaseController
 {
