@@ -22,12 +22,14 @@ class NewsController extends AdminBaseController
     public function actionIndex()
     {
         $searchModel = new NewsSearch();
+        $notPublished = News::getAllNotPublished();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination = ['pageSize' => 20];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'notPublished' => $notPublished
         ]);
     }
 
@@ -123,46 +125,48 @@ class NewsController extends AdminBaseController
     }
 
 
-
     /**
      * Метод изменения поля published ("опубликовано")
      * @param $id
+     * @param $decision
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionPublish($id)
+    public function actionPublish($id, $decision)
     {
+        $decision = intval($decision);
         $article = $this->findModel($id);
-        $article->publish = 1;
+        $article->publication($decision);
 
         if ($article->save()) {
+            if (1 === $article->publish) {
             Yii::$app->session->setFlash('success', 'Опубликовано');
-            return $this->redirect(['index']);
+                return $this->redirect(['index']);
+            } elseif (0 === $article->publish){
+                Yii::$app->session->setFlash('warning', 'Снято с публикации');
+                return $this->redirect([
+                    'view',
+                    'id' => $article->id
+                ]);
+            }
+
         }
     }
 
     /**
-     * Метод скрытия новости от публикации
-     * @param $id
-     * @return \yii\web\Response
+     * Метод убирает изображение из новости
+     * @param int $id
      * @throws NotFoundHttpException
      */
-    public function actionUnpublish($id)
+    public function actionRemoveArticleImage($id)
     {
         $article = $this->findModel($id);
-        $article->publish = 0;
-
-        if ($article->save()) {
-            Yii::$app->session->setFlash('success', 'Запись скрыта из опубликованных');
-            return $this->redirect([
-                'view',
-                'id' => $article->id
-            ]);
-        }
+        $article->deleteArticlesImage();
+        return $this->redirect([
+            'view',
+            'id' => $id
+        ]);
     }
-
-
-
     /**
      * Finds the News model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

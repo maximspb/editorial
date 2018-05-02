@@ -38,6 +38,33 @@ class News extends \common\models\News
     }
 
     /**
+     * метод для изменения атрибута опубликования новости
+     * @param int $decision
+     */
+    public function publication(int $decision)
+    {
+       $this->publish = $decision;
+    }
+
+    /**
+     * Метод возвращает массив всех неопубликованных новостей
+     * @return array|\common\models\News[]
+     */
+    public static function getAllNotPublished()
+    {
+        return News::find()->where(['publish' => 0])->all();
+    }
+
+    /**
+     * метод обнуления картинки у новости
+     */
+    public function deleteArticlesImage()
+    {
+        $this->image_id = null;
+        $this->save();
+    }
+
+    /**
      * метод создания связи
      * новости с авторами
      */
@@ -58,6 +85,7 @@ class News extends \common\models\News
             }
         }
     }
+
 
     /**
      * метод создания связи
@@ -90,12 +118,15 @@ class News extends \common\models\News
             }
         }
     }
+
+
     public function afterSave($insert, $changedAttributes)
     {
         $this->setNewsToAuthorsCollation();
         $this->setNewsToTagsCollation();
         parent::afterSave($insert, $changedAttributes);
     }
+
 
     public function beforeSave($insert)
     {
