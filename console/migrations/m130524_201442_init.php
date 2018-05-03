@@ -28,7 +28,7 @@ class m130524_201442_init extends Migration
 
         $this->insert('{{%user}}',[
             'username' => 'admin',
-            'full_name' => 'Admin',
+            'full_name' => 'Admin Admin',
             'auth_key' => Yii::$app->security->generateRandomString(),
             'password_hash' => Yii::$app->security->generatePasswordHash('password'),
             'email' => 'admin@editorial.com'
