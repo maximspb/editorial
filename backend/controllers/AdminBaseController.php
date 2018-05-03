@@ -37,6 +37,10 @@ class AdminBaseController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'allow' => 'login',
+                        'roles' => ['?'],
+                    ]
                 ],
             ],
         ];
