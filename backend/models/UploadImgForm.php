@@ -4,8 +4,6 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\web\UploadedFile;
-use backend\models\Image;
-
 
 /**
  * @property UploadedFile $imageFile
@@ -20,12 +18,25 @@ class UploadImgForm extends Model
      */
     public $imageFile;
     public $imageId;
+    public $alt;
+    public $source;
+    public $tagsList =[];
 
     public function rules()
     {
         return [
             [['imageFile'], 'file', 'skipOnEmpty' => false, 'maxSize' => null],
-            ['imageId', 'safe']
+            [['alt', 'tagsList', 'imageId', 'source'], 'safe'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'alt' => 'Описание',
+            'source' => 'Источник изображения',
+            'tagsList' => 'Теги'
+
         ];
     }
 
@@ -36,12 +47,15 @@ class UploadImgForm extends Model
             $this->imageFile->saveAs(\Yii::getAlias('@img').'/'.$nameToSave);
             $uploaded = new Image();
             $uploaded->filename = $nameToSave;
+            $uploaded->alt = $this->alt;
+            $uploaded->source = $this->source;
+            $uploaded->tagsList = $this->tagsList;
             if ($uploaded->save()) {
                 $this->imageId = $uploaded->id;
             }
             return true;
         } else {
-            die('AAAAAAAAAAAAAAAAAAAAAAAAAAA!!!');
+            throw new \Exception();
         }
     }
 }
