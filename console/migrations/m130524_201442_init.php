@@ -25,6 +25,14 @@ class m130524_201442_init extends Migration
             'created_at' => $this->timestamp()->defaultValue(null),
             'updated_at' => $this->timestamp()->defaultValue(null),
         ], $tableOptions);
+
+        $this->insert('{{%user}}',[
+            'username' => 'admin',
+            'full_name' => 'Admin Admin',
+            'auth_key' => Yii::$app->security->generateRandomString(),
+            'password_hash' => Yii::$app->security->generatePasswordHash('password'),
+            'email' => 'admin@editorial.com'
+        ]);
     }
 
     public function down()
