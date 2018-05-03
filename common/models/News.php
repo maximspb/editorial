@@ -52,7 +52,7 @@ class News extends \yii\db\ActiveRecord
             [['text'], 'string'],
             [['image_id', 'theme_id', 'rubric_id', 'user_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['title', 'lead'], 'string', 'max' => 100],
+            [['title', 'lead'], 'string', 'max' => 200],
             [['slug'], 'string', 'max' => 150],
             [['slug'], 'unique',],
             [['title'], 'unique', 'message' => 'Такой заголовок уже был'],

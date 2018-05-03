@@ -48,7 +48,7 @@ class SiteController extends AdminBaseController
         } else {
             $model->password = '';
 
-            return $this->render('login', [
+            return $this->renderPartial('login', [
                 'model' => $model,
             ]);
         }

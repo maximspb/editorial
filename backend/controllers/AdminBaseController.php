@@ -34,13 +34,15 @@ class AdminBaseController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
+
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'allow' => 'login',
+                        'allow' => true,
+                        'actions' => ['login'],
                         'roles' => ['?'],
-                    ]
+                    ],
                 ],
             ],
         ];
