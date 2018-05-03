@@ -10,7 +10,7 @@ use yii\data\Pagination;
 use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\data\Sort;
-use common\models\Tag;
+use backend\models\Tag;
 
 /**
  * ImageController implements the CRUD actions for Image model.
@@ -57,8 +57,12 @@ class ImageController extends AdminBaseController
     public function actionAddImage()
     {
         $model = new UploadImgForm();
-
+        $tags = Tag::getMappedFromIdToNameArray();
         if (Yii::$app->request->isPost) {
+            $model->alt = Yii::$app->request->post('UploadImgForm')['alt'];
+            $model->source = Yii::$app->request->post('UploadImgForm')['source'];
+            $model->tagsList = Yii::$app->request->post('UploadImgForm')['tagsList'];
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->uploadFile()) {
                     return $this->redirect(['index']);
@@ -66,6 +70,7 @@ class ImageController extends AdminBaseController
         }
         return $this->render('addImage', [
             'model' => $model,
+            'data' => $tags
         ]);
 
     }
@@ -79,14 +84,23 @@ class ImageController extends AdminBaseController
     public function  actionUploadImgToArticle($id)
     {
         $model = new UploadImgForm();
+        $tags = Tag::getMappedFromIdToNameArray();
+        try {
         if (Yii::$app->request->isPost) {
+            $model->alt = Yii::$app->request->post('UploadImgForm')['alt'];
+            $model->source = Yii::$app->request->post('UploadImgForm')['source'];
+            $model->tagsList = Yii::$app->request->post('UploadImgForm')['tagsList'];
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->uploadFile()) {
                 return $this->redirect(['select-from-gallery', 'id' => $id]);
             }
+            }
+        } catch (\Exception $e){
+            echo $e; die();
         }
         return $this->render('addImage', [
             'model' => $model,
+            'data' => $tags
         ]);
     }
 
