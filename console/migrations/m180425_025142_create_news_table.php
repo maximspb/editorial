@@ -15,7 +15,7 @@ class m180425_025142_create_news_table extends Migration
         $this->createTable('news', [
             'id' => $this->primaryKey(),
             'title'=> $this->string(100)->notNull(),
-            'lead'=> $this->string(100)->notNull(),
+            'lead'=> $this->string(200)->notNull(),
             'text'=>$this->text()->notNull(),
             'image_id'=>$this->integer(),
             'theme_id'=>$this->integer(),
